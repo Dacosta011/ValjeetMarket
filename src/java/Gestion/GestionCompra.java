@@ -2,6 +2,7 @@ package Gestion;
 
 import Conexiones.AbstractDB;
 import Negocio.Compra;
+import Negocio.Compra1;
 import Negocio.Producto;
 import Negocio.Proveedor;
 import java.sql.PreparedStatement;
@@ -36,7 +37,8 @@ public class GestionCompra extends AbstractDB
         try 
         {
             ResultSet res;
-            PreparedStatement stmt = this.conn.prepareStatement("call newCompra(?,?,?,?,?,?)");
+            PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO compra(IdCompra, Fecha, Total, Credito, Abono, Proveedor)\n" +
+                                                        "        VALUES (?,?,?,?,?,?)");
             
             stmt.setString(1,compra.getIdCo());
             stmt.setString(2,compra.getFecha());
@@ -45,8 +47,7 @@ public class GestionCompra extends AbstractDB
             stmt.setInt(5,compra.getAbono());
             stmt.setString(6,compra.getIdP());
             
-            res = stmt.executeQuery();
-            res.close();
+            stmt.executeUpdate();
             todoBien=true;
             
         }
@@ -64,14 +65,14 @@ public class GestionCompra extends AbstractDB
         try 
         {
             ResultSet res;
-            PreparedStatement stmt = this.conn.prepareStatement("call newProveedorProducto(?,?)");
+            PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO proveedorproducto(Proveedor, Producto)\n" +
+                                                                              "        VALUES (?,?)");
             
             stmt.setString(1,idproveedor);
             stmt.setString(2,idproducto);
             
             
-            res = stmt.executeQuery();
-            res.close();
+            stmt.executeUpdate();
             todoBien=true;
             
         }
@@ -83,21 +84,21 @@ public class GestionCompra extends AbstractDB
         return todoBien;
     }
     
-    public boolean crearDetalles(String idcompra, String idproducto, String precio, String cantidad) 
+    public boolean crearDetalles(String idcompra, String idproducto, double precio, int cantidad) 
     {
         boolean todoBien=false;
         try 
         {
             ResultSet res;
-            PreparedStatement stmt = this.conn.prepareStatement("call newDetalleCompra(?,?,?,?)");
+            PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO detallecompra(idCompra, Producto, Precio, Cantidad)\n" +
+                                                                          "        VALUES (?, ? , ? , ?)");
             
             stmt.setString(1,idcompra);
             stmt.setString(2,idproducto);
-            stmt.setString(3,precio);
-            stmt.setString(4,cantidad);
+            stmt.setDouble(3,precio);
+            stmt.setInt(4,cantidad);
             
-            res = stmt.executeQuery();
-            res.close();
+            stmt.executeUpdate();
             todoBien=true;
             
         }
@@ -146,8 +147,8 @@ public class GestionCompra extends AbstractDB
         return compras;
     }
      
-     public ArrayList<Compra> getCompraFecha(String inicio, String fin) {
-        ArrayList<Compra> compras = new ArrayList();
+     public ArrayList<Compra1> getCompraFecha(String inicio, String fin) {
+        ArrayList<Compra1> compras = new ArrayList();
 
         try {
 
@@ -158,7 +159,7 @@ public class GestionCompra extends AbstractDB
             res = stmt.executeQuery();
             while (res.next()) {
                 
-                Compra compra = new Compra();
+                Compra1 compra = new Compra1();
                  
                  compra.setIdCo(res.getString("IdCompra"));
                  compra.setIdP(res.getString("Proveedor"));
@@ -233,6 +234,24 @@ public class GestionCompra extends AbstractDB
             System.out.println(ex);
         }
         return actualizado;
+    }
+     
+     public String GenerarSerie()
+     {
+        String numeroserie="";
+        String sql="SELECT max(IdCompra) FROM compra";
+         
+        try {
+            ResultSet res;
+            PreparedStatement stmt = this.conn.prepareStatement(sql);
+            res = stmt.executeQuery();
+            
+            while (res.next()) {
+                numeroserie=res.getString(1);
+            }
+        } catch (Exception e) {
+        }
+        return numeroserie;
     }
     
 }

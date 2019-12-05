@@ -12,29 +12,16 @@
             <div class="col-sm-4">
                 <div class="card">
                     <div class="card-body">
-                        <form action="Controlador?menu=Empleado" method="POST">
+                        <form action="ControladorProveedor?menu=Proveedor" method="POST">
                             <div class="form-group">
-                                <label>Dni</label>
+                                <label>ID</label>
                                 <input type="text" value="" name="txtDni" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label>Nombres</label>
                                 <input type="text" value="" name="txtNombres" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <label>Telefono</label>
-                                <input type="text" value="" name="txtTel" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label>Estado</label>
-                                <input type="text" value="" name="txtEstado" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label>Usuario</label>
-                                <input type="text" value="" name="txtUser" class="form-control">
-                            </div>
                             <input type="submit" name="accion" value="Agregar" class="btn btn-primary">
-                            <input type="submit" name="accion" value="Actualizar" class="btn btn-success">
                         </form>
                     </div>                         
                 </div>
@@ -46,30 +33,19 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>DNI</th>
                                     <th>NOMBRES</th>
-                                    <th>TELEFONO</th>
-                                    <th>ESTADO</th>
-                                    <th>USER</th>
-                                    <th>ACCIONES</th>
                                 </tr>
                             </thead>
                             <tbody> 
-                                
+                                <c:forEach var="prove" items="${proveedores}">
+                                           
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <a class="btn btn-warning" href="Controlador?menu=Empleado&accion=Editar&id=">Editar</a>
-                                            <a class="btn btn-danger" href="Controlador?menu=Empleado&accion=Delete&id=">Delete</a>
-                                        </td>
+                                        <td>${prove.getIdP()}</td>
+                                        <td>${prove.getNombreP()}</td>
+                                     
                                     </tr>
-                                
-
+                                </c:forEach>
+                                    
                             </tbody>
                         </table>
                     </div>

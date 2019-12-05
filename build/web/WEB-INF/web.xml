@@ -8,6 +8,14 @@
         <servlet-name>Controlador</servlet-name>
         <servlet-class>Servlets.Controlador</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControladorProveedor</servlet-name>
+        <servlet-class>Servlets.ControladorProveedor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControladorCompra</servlet-name>
+        <servlet-class>Servlets.ControladorCompra</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorValidar</servlet-name>
         <url-pattern>/ControladorValidar</url-pattern>
@@ -15,6 +23,14 @@
     <servlet-mapping>
         <servlet-name>Controlador</servlet-name>
         <url-pattern>/Controlador</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorProveedor</servlet-name>
+        <url-pattern>/ControladorProveedor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorCompra</servlet-name>
+        <url-pattern>/ControladorCompra</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

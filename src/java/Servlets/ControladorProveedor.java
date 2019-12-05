@@ -5,10 +5,12 @@
  */
 package Servlets;
 
-import Gestion.GestionUsuario;
-import Negocio.Usuario;
+import Gestion.GestionProveedor;
+import Negocio.Producto;
+import Negocio.Proveedor;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author USER
  */
-public class ControladorValidar extends HttpServlet {
+public class ControladorProveedor extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,36 +30,41 @@ public class ControladorValidar extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     * 
-     * 
      */
-    Usuario em = new Usuario();
-    GestionUsuario edao = new GestionUsuario();
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {
+        String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
-        if (accion.equalsIgnoreCase("Ingresar")) {
-            String user = request.getParameter("txtuser");
-            String pass = request.getParameter("txtpass");
-            
-            System.err.println("usuario: "+user+" "+ "pass: "+pass);
-            
-            
-            
-            em = edao.validar(user, pass);
-            
-            System.out.println(em);
-            
-            if (em.getIdU() != "") {
-                request.setAttribute("usuario", em);
-                request.getRequestDispatcher("Controlador?menu=Principal").forward(request, response);
-            } else {
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+        Proveedor prove = new Proveedor();
+        GestionProveedor gpre = new GestionProveedor();
+        
+        if (menu.equals("Proveedor")) 
+        {
+            switch (accion) 
+            {
+                case "Listar":
+                    ArrayList<Proveedor> lista = gpre.getTodos();
+                    System.out.println(lista);
+                    
+                    request.setAttribute("proveedores", lista);
+                    break;
+                    
+                case "Agregar":
+                    String id = request.getParameter("txtDni");
+                    String Nombre = request.getParameter("txtNombres");
+                    
+                    prove = new Proveedor(id, Nombre);
+                    
+                    gpre.guardaProveedor(prove);
+                   
+                    request.getRequestDispatcher("ControladorProveedor?menu=Proveedor&accion=Listar").forward(request, response);
+                    break;   
+                default:                    
+                    throw new AssertionError();
             }
-        } else {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            
+            request.getRequestDispatcher("Proveedor.jsp").forward(request, response);
         }
     }
 

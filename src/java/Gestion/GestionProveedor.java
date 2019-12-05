@@ -1,6 +1,7 @@
 package Gestion;
 
 import Conexiones.AbstractDB;
+import Negocio.Producto;
 import Negocio.Proveedor;
 import Negocio.Usuario;
 import java.sql.PreparedStatement;
@@ -23,13 +24,13 @@ public class GestionProveedor extends AbstractDB
         try 
         {
             ResultSet res;
-            PreparedStatement stmt = this.conn.prepareStatement("call newProveedor(?,?)");
+            PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO proveedor(idProveedor,Nombre)\n" +
+                                                        "        VALUES (?,?)");
             
             stmt.setString(1,proveedor.getIdP());
             stmt.setString(2,proveedor.getNombreP());
                        
-            res = stmt.executeQuery();
-            res.close();
+            stmt.executeUpdate();
             todoBien=true;
             
         }
@@ -47,8 +48,9 @@ public class GestionProveedor extends AbstractDB
         
         try 
         {
-             Statement stmt = this.conn.createStatement();
-             ResultSet res = stmt.executeQuery("call getAllProveedores()");
+             ResultSet res;
+             PreparedStatement stmt = this.conn.prepareStatement("SELECT * FROM proveedor");
+             res = stmt.executeQuery();
              while(res.next())
              {
                  Proveedor proveedor = new Proveedor();
@@ -62,6 +64,30 @@ public class GestionProveedor extends AbstractDB
             System.out.println(ex);
         }
         return proveedores;
+    }
+    
+     public Proveedor buscarProveedor(String id) 
+    {
+       Proveedor proveedor=null;
+        try 
+        {
+             ResultSet res;
+             PreparedStatement stmt = this.conn.prepareStatement("SELECT * FROM proveedor\n" +
+                                                        "        WHERE idProveedor ="+id);
+             res = stmt.executeQuery();
+             
+             while(res.next())
+             {
+                 proveedor = new Proveedor();
+                 
+                 proveedor.setIdP(res.getString("idProveedor"));
+                 proveedor.setNombreP(res.getString("Nombre"));
+             }
+             res.close();   
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return proveedor;
     }
     
 }

@@ -144,7 +144,7 @@ public class GestionProducto extends AbstractDB
         
         try 
         {
-            ResultSet res;
+             ResultSet res;
              PreparedStatement stmt = this.conn.prepareStatement("SELECT * FROM producto");
              res = stmt.executeQuery();
              while(res.next())
@@ -173,14 +173,15 @@ public class GestionProducto extends AbstractDB
         try 
         {
             ResultSet res;
-            PreparedStatement stmt = this.conn.prepareStatement("call actualizaProducto(?,?)");
+            PreparedStatement stmt = this.conn.prepareStatement("UPDATE producto SET \n" +
+                                                       "        Cantidad =?\n" +
+                                                       "        WHERE idProducto=?");
             
-            stmt.setString(1,idproducto);
-            stmt.setInt(2,cantidad);
+            stmt.setInt(1,cantidad);
+            stmt.setString(2,idproducto);
             
             
-            res = stmt.executeQuery();
-            res.close();
+            stmt.executeUpdate();
             actualizado=true;
             
         }
@@ -203,8 +204,7 @@ public class GestionProducto extends AbstractDB
             stmt.setInt(2,cantidad);
             
             
-            res = stmt.executeQuery();
-            res.close();
+            stmt.executeUpdate();
             actualizado=true;
             
         }

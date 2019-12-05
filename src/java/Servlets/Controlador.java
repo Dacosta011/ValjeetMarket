@@ -42,7 +42,8 @@ public class Controlador extends HttpServlet {
         if (menu.equals("Principal")) {
             request.getRequestDispatcher("Principal.jsp").forward(request, response);
         }
-        if (menu.equals("Producto")) {
+        if (menu.equals("Producto")) 
+        {
             switch (accion) 
             {
                 case "Listar":
@@ -55,16 +56,16 @@ public class Controlador extends HttpServlet {
                 case "Agregar":
                     String id = request.getParameter("txtid");
                     String Nombre = request.getParameter("txtNombres");
-                    double pre = Double.parseDouble(request.getParameter("txtPre"));
+                    int pre = Integer.parseInt(request.getParameter("txtPre"));
                     String fot = request.getParameter("txtFoto");
                     
                     
                     p.setIdPo(id);
                     p.setNombrePo(Nombre);
                     p.setCantidadPo("0");
-                    p.setPrecioCompraPo(Double.toString(pre));
-                    double precioventa = (pre*0.2)+pre;
-                    p.setPrecioVentaPo(Double.toString(precioventa));
+                    p.setPrecioCompraPo(Integer.toString(pre));
+                    int precioventa = (int) ((pre*0.2)+pre);
+                    p.setPrecioVentaPo(Integer.toString(precioventa));
                     p.setNombreFotoPo(fot);
                     pdao.guardaProducto(p);
          

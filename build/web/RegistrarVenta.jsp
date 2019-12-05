@@ -7,11 +7,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>VENTAS</title>
         <style>
-            @media print{
-                .parte01,img, .btn, .accion{
-                    display: none;
-                }
-            }
+           
         </style>
        
     </head>
@@ -19,20 +15,31 @@
         <div class="d-flex">
             <div class="col-lg-5 parte01">
                 <div class="card">
-                    <form action="Controlador?menu=NuevaVenta" method="POST">
+                    <form action="ControladorCompra?menu=NuevaVenta" method="POST">
                         <div class="card-body">
                             <!--DATOS DEL PRODUCTO-->
                             <div class="form-group">
-                                <label>Datos del Cliente</label>
+                                <label>Datos del Proveedor</label>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="col-sm-6 d-flex">
-                                    <input type="text" name="codigocliente" value="${c.getDni()}" class="form-control" placeholder="Codigo">
+                                    <input type="text" name="codigocliente" value="${c.getIdP()}" class="form-control" placeholder="Codigo">
                                     <button type="submit" name="accion" value="BuscarCliente" class="btn btn-outline-info">Buscar</button>
                                 </div>                           
                                 <div class="col-sm-6">
-                                    <input type="text" name="nombrescliente" value="${c.getNom()}" placeholder="Datos Cliente" class="form-control">
+                                    <input type="text" name="nombrescliente" value="${c.getNombreP()}" placeholder="Datos Cliente" class="form-control">
                                 </div>                           
+                            </div>
+                            <div class="form-group">
+                                <label>Datos del Factura</label>
+                            </div>    
+                            <div class="form-group d-flex">
+                                <div class="col-sm-6 d-flex">
+                                    <input type="date" name="fecha" value="${fecha}" class="form-control" placeholder="S/.0.00">                                
+                                </div>                           
+                                <div class="col-sm-6 d-flex">
+                                    <input type="text" value="${credi}" name="credi" placeholder="Credito" class="form-control">
+                                </div>  
                             </div>
                             <!--DATOS DEL PRODUCTO-->
                             <div class="form-group">
@@ -40,22 +47,22 @@
                             </div>
                             <div class="form-group d-flex">
                                 <div class="col-sm-6 d-flex">
-                                    <input type="text" name="codigoproducto" value="${producto.getId()}" class="form-control" placeholder="Codigo">
+                                    <input type="text" name="codigoproducto" value="${producto.getIdPo()}" class="form-control" placeholder="Codigo">
                                     <button type="submit" name="accion" value="BuscarProducto" class="btn btn-outline-info">Buscar</button>
                                 </div>                           
                                 <div class="col-sm-6">
-                                    <input type="text" name="nomproducto" value="${producto.getNom()}" placeholder="Datos Producto" class="form-control">
+                                    <input type="text" name="nomproducto" value="${producto.getNombrePo()}" placeholder="Datos Producto" class="form-control">
                                 </div>  
                             </div>
                             <div class="form-group d-flex">
                                 <div class="col-sm-6 d-flex">
-                                    <input type="text" name="precio" value="${producto.getPre()}" class="form-control" placeholder="S/.0.00">                                
+                                    <input type="text" name="precio" value="${producto.getPrecioCompraPo()}" class="form-control" placeholder="S/.0.00">                                
                                 </div>                           
                                 <div class="col-sm-3">
                                     <input type="number" value="1" name="cant" placeholder="" class="form-control">
                                 </div>  
                                 <div class="col-sm-3">
-                                    <input type="text" name="stock" value="${producto.getStock()}" placeholder="Stock" class="form-control">
+                                    <input type="text" name="stock" value="${producto.getCantidadPo()}" placeholder="Stock" class="form-control">
                                 </div>  
                             </div>
                             <!--BOTON AGREGAR PRODUCTO AL REGISTRO-->
@@ -92,13 +99,13 @@
                                 <c:forEach var="list" items="${lista}">
                                     <tr class="text-center">
                                         <td>${list.getItem()}</td>
-                                        <td>${list.getIdproducto()}</td>
-                                        <td>${list.getDescripcionP()}</td>
+                                        <td>${list.getIdP()}</td>
+                                        <td>${list.getDescripcion()}</td>
                                         <td>${list.getPrecio()}</td>
                                         <td>${list.getCantidad()}</td>
                                         <td>${list.getSubtotal()}</td>
                                         <td class="d-flex">
-                                            <a href="#" class="btn btn-warning">Editar</a>
+                                            <a href=href="ControladorCompra?menu=NuevaVenta&accion=Eliminar&id=${list.getItem()}" class="btn btn-warning">Editar</a>
                                             <a href="#" class="btn btn-danger" style="margin-left: 5px">Delete</a>
                                         </td>
                                     </tr>
@@ -110,12 +117,12 @@
                     <div class="card-footer" >
                         <div class="row">
                             <div class="col-sm-6">
-                                <a href="Controlador?menu=NuevaVenta&accion=GenerarVenta" onclick="print()" class="btn btn-success">Generar Venta</a>
+                                <a href="ControladorCompra?menu=NuevaVenta&accion=GenerarVenta" class="btn btn-success">Generar Venta</a>
                                 <input type="submit" name="accion" value="Cancelar" class="btn btn-danger">
                             </div>
                             <div class="col-sm-6 ml-auto d-flex">                                
                                 <label class=" col-sm-6 text-right mt-2">Total a Pagar</label>                                                       
-                                <input type="text" name="txtTotal" value="S/.${totalpagar}0" class="form-control text-center font-weight-bold" style="font-size: 18px;">
+                                <input type="text" name="totall" value="${totalpagar}" class="form-control text-center font-weight-bold" style="font-size: 18px;">
                             </div>
                         </div>                        
                     </div>

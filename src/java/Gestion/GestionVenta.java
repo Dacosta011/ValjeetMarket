@@ -1,7 +1,7 @@
 package Gestion;
 
 import Conexiones.AbstractDB;
-import Negocio.Compra;
+import Negocio.Compra1;
 import Negocio.Proveedor;
 import Negocio.Usuario;
 import Negocio.Venta;
