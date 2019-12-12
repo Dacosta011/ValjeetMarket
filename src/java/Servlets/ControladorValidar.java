@@ -9,6 +9,7 @@ import Gestion.GestionUsuario;
 import Negocio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,25 +39,36 @@ public class ControladorValidar extends HttpServlet {
             throws ServletException, IOException 
     {
         String accion = request.getParameter("accion");
-        if (accion.equalsIgnoreCase("Ingresar")) {
+        
+        if (accion.equalsIgnoreCase("Ingresar")) 
+        {
             String user = request.getParameter("txtuser");
             String pass = request.getParameter("txtpass");
             
-            System.err.println("usuario: "+user+" "+ "pass: "+pass);
-            
-            
-            
+            System.out.println("usuario: "+user+" "+ "pass: "+pass);
+      
             em = edao.validar(user, pass);
             
             System.out.println(em);
             
-            if (em.getIdU() != "") {
-                request.setAttribute("usuario", em);
-                request.getRequestDispatcher("Controlador?menu=Principal").forward(request, response);
-            } else {
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+            if(!"".equals(em.getIdU()))
+            {
+                System.out.println("holaa");
+                if("Admin".equals(em.getTipo()))
+                {
+                    request.setAttribute("usuario", em);
+                    request.getRequestDispatcher("Controlador?menu=Principal").forward(request, response);
+                    
+                }else
+                {
+                     request.setAttribute("usuario", em);
+                     request.getRequestDispatcher("Controlador1?accion=llenar").forward(request, response);
+                }   
+            }else{
+                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
-        } else {
+        } 
+        else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
     }

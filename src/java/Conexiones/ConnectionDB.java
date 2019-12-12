@@ -15,7 +15,8 @@ public class ConnectionDB
     private Connection conn;
     
     public ConnectionDB() 
-    {        
+    {   
+        //this.url = "jdbc:mysql://us-cdbr-iron-east-05.cleardb.net:3306/heroku_002c139c356617d?user=bf3738fa61cab0&password=25cef0de";
         this.url = "jdbc:mysql://us-cdbr-iron-east-05.cleardb.net:3306/heroku_7d40021705f4e61?user=bf357389bc90bd&password=3a9137a7";
         //this.url = "jdbc:mysql://localhost:3306/dbvaljeet?user=root&password=1234";
         try 

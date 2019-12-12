@@ -112,12 +112,10 @@ public class GestionUsuario extends AbstractDB
     
     public Usuario validar(String user, String dni) {
         Usuario em = new Usuario();
-        String sql = "select * from cliente where idCliente=? and Clave=?";
+        String sql = "SELECT * FROM cliente where idCliente="+user+" and Clave="+dni;
         try {
             ResultSet res;
             PreparedStatement stmt = this.conn.prepareStatement(sql);
-            stmt.setString(1, user);
-            stmt.setString(2, dni);
             res = stmt.executeQuery();
             while (res.next()) {
                 em.setIdU(res.getString("idCliente"));

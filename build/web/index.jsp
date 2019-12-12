@@ -7,13 +7,16 @@
         <title>Login</title>
     </head>
     <body>
-        <div class="container mt-4 col-lg-4">
+        <center>
+                 <img src="img/slide.jpg"/>
+        </center> 
+        <div class="container mt-4 col-lg-4"> 
             <div class="card col-sm-10">
                 <div class="card-body">
-                    <form class="form-sign" action="ControladorValidar" method="POST">
+                    <form class="form-sign" action="Controlador1" method="POST">
                         <div class="form-group text-center">
                             <h3>Login</h3>
-                            <img src="img/logo.jpg" alt="70" width="170"/>
+                           
                             <label>Bienvenidos al Sistema</label>
                         </div>
                         <div class="form-group">
@@ -26,6 +29,9 @@
                         </div>
                         <input type="submit" name="accion" value="Ingresar" class="btn btn-primary btn-block">
                     </form>
+                    <br>
+                    
+                    <label>¿No tienes cueta aun? Registrate <a href="NuevoUs.jsp">Aca</a></label>
                 </div>
             </div>
         </div>

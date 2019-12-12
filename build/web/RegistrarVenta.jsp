@@ -12,6 +12,12 @@
        
     </head>
     <body>
+        
+        
+        
+        
+        
+        
         <div class="d-flex">
             <div class="col-lg-5 parte01">
                 <div class="card">
