@@ -4,15 +4,11 @@
  * and open the template in the editor.
  */
 
-$(document).ready(function () {
+$(document).ready(function () 
+{
     $("tr #btnElimina").click(function () {
         var idp = $(this).parent().find("#idp").val();
-        
-
-   // swal("Good job!", "You clicked the button!", "success");
-
     eliminar(idp);    
-
     });
     function eliminar(idp)
     {
@@ -21,14 +17,12 @@ $(document).ready(function () {
             type: 'POST',
             url: url,
             data: "idp=" + idp,
-            success: function (data, textStatus, jqXHR)
-            {
+            success: function (data, textStatus, jqXHR){
 
             }
-
-        });
-       
+        });  
     }
+
 });
 
 

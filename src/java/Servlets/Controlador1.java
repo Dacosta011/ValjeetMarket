@@ -46,9 +46,9 @@ public class Controlador1 extends HttpServlet {
     ArrayList<Producto> productos = new ArrayList<Producto>();
 
     ArrayList<Carrito> carrito = new ArrayList<Carrito>();
-    int item;
+    int item = 0;
     int total = 0;
-    int cantidad = 10;
+    int cantidad = 1;
 
     int idp;
     Carrito car = new Carrito();
@@ -61,6 +61,8 @@ public class Controlador1 extends HttpServlet {
     Venta ven = new Venta();
     GestionVenta gven = new GestionVenta();
     ArrayList<Venta> ventas = new ArrayList<Venta>();
+
+    ArrayList<Venta> list = new ArrayList<Venta>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -160,6 +162,7 @@ public class Controlador1 extends HttpServlet {
 
             case "llenar":
 
+                //carrito.removeAll(carrito);
                 productos = pg.getTodos();
 
                 //System.out.println(productos);
@@ -262,6 +265,7 @@ public class Controlador1 extends HttpServlet {
                 System.out.println("TODOS SON " + carrito.size());
 
                 carrito.removeAll(carrito);
+                list.removeAll(list);
 
                 System.out.println("LOS ELIMINADOS SON " + carrito.size());
                 request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -335,33 +339,24 @@ public class Controlador1 extends HttpServlet {
                 System.out.println(ven);
 
                 productos = pg.getTodos();
-                for (Carrito cars : carrito) 
-                {
-                    for (Producto pros : productos) 
-                    {
-                        if (cars.getIdProducto() == Integer.parseInt(pros.getIdPo())) 
-                        {
-                            if (cars.getCantidad() > Integer.parseInt(pros.getCantidadPo())) 
-                            {
+                for (Carrito cars : carrito) {
+                    for (Producto pros : productos) {
+                        if (cars.getIdProducto() == Integer.parseInt(pros.getIdPo())) {
+                            if (cars.getCantidad() > Integer.parseInt(pros.getCantidadPo())) {
                                 request.setAttribute("ok", true);
-                                request.setAttribute("mens", "No Hay Productos Suficientes Para El Producto " + " "+ pros.getNombrePo());
-                                
-                                System.out.println("No Hay Productos Suficientes Para El Producto " + " "+ pros.getNombrePo());
-                                
-                                carrito.removeAll(carrito);
-                                
-                                request.getRequestDispatcher("Controlador1?accion=Carrito").forward(request, response);
-                                
-                                
-                                //request.getRequestDispatcher("Controlador1?accion=llenar").forward(request, response);
-                                
-                            } else if (cars.getCantidad() <= Integer.parseInt(pros.getCantidadPo())) 
-                            {
-                                if (gven.crearVenta(ven) == true) 
-                                {
+                                request.setAttribute("mens", "No Hay Productos Suficientes Para El Producto " + " " + pros.getNombrePo());
 
-                                    for (int i = 0; i < carrito.size(); i++) 
-                                    {
+                                System.out.println("No Hay Productos Suficientes Para El Producto " + " " + pros.getNombrePo());
+
+                                carrito.removeAll(carrito);
+
+                                request.getRequestDispatcher("Controlador1?accion=Carrito").forward(request, response);
+
+                                //request.getRequestDispatcher("Controlador1?accion=llenar").forward(request, response);
+                            } else if (cars.getCantidad() <= Integer.parseInt(pros.getCantidadPo())) {
+                                if (gven.crearVenta(ven) == true) {
+
+                                    for (int i = 0; i < carrito.size(); i++) {
                                         DetalleVen deve = new DetalleVen(numeroserie, Integer.toString(carrito.get(i).getIdProducto()), carrito.get(i).getPrecioCompra(), carrito.get(i).getCantidad());
                                         System.out.println(deve);
                                         gven.crearDetallesVenta(deve);
@@ -369,7 +364,7 @@ public class Controlador1 extends HttpServlet {
 
                                         pro = pg.buscarProducto(Integer.toString(carrito.get(i).getIdProducto()));
 
-                                        int sac = Integer.parseInt(pro.getCantidadPo()) - cantidad;
+                                        int sac = Integer.parseInt(pro.getCantidadPo()) - carrito.get(i).getCantidad();
                                         pg.ActualizaDatos(Integer.toString(carrito.get(i).getIdProducto()), sac);
                                     }
 
@@ -385,20 +380,110 @@ public class Controlador1 extends HttpServlet {
                 }
 
                 break;
-                
+
             case "Registrar":
-                
+
                 String id = request.getParameter("txtid");
                 String nom = request.getParameter("txtnom");
                 String tip = request.getParameter("tipous");
                 String Pass = request.getParameter("txtpass1");
+
+                Usuario us = new Usuario(id, nom, tip, Pass);
+
+                edao.guardaUsuario(us);
+
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
+                break;
+
+            case "ActualizaCantidad":
+                int idp = Integer.parseInt(request.getParameter("idp"));
+                int Can = Integer.parseInt(request.getParameter("Cantidad"));
+
+                for (int i = 0; i < carrito.size(); i++) {
+                    if (carrito.get(i).getIdProducto() == idp) {
+                        carrito.get(i).setCantidad(Can);
+                        int st = carrito.get(i).getPrecioCompra() * Can;
+                        carrito.get(i).setSubtotal(st);
+                    }
+                }
+                break;
+
+            case "Pagos":
+
+                list.removeAll(list);
+                ventas = gven.Buscarenta(em.getIdU());
+
+                for (Venta venta : ventas) {
+                    if (venta.getAbono() < venta.getTotal()) {
+                        list.add(venta);
+                        System.out.println("las facturas son " + list);
+                    }
+                }
+                //request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
+
+                request.setAttribute("usuario", em);
+                request.setAttribute("ventas", list);
+                request.getRequestDispatcher("Pagos.jsp").forward(request, response);
+
+                break;
+
+            case "poner":
+
+                String idvent = request.getParameter("idven");
+
+                ventas = gven.Buscarenta(em.getIdU());
+
+                for (Venta venta : ventas) {
+                    if (venta.getIdVe().equals(idvent)) {
+                        String idv = venta.getIdVe();
+                        int tot = venta.getTotal();
+                        int deu = venta.getTotal() - venta.getAbono();
+
+                        request.setAttribute("idv", idv);
+                        request.setAttribute("tot", tot);
+                        request.setAttribute("deu", deu);
+                    }
+                }
+                request.setAttribute("usuario", em);
+                request.setAttribute("ventas", list);
+                request.getRequestDispatcher("Pagos.jsp").forward(request, response);
+
+                break;
+
+            case "Pagar":
+
+                String idv1 = (request.getParameter("hidd"));
                 
-                Usuario  us = new Usuario(id, nom, tip, Pass);
-                
-                 edao.guardaUsuario(us);
-                 
-                  request.getRequestDispatcher("index.jsp").forward(request, response);
-                
+
+                ventas = gven.Buscarenta(em.getIdU());
+                if (idv1 != "") 
+                {
+                    int abn = Integer.parseInt(request.getParameter("txtabon"));
+                    for (Venta venta : ventas) {
+                        if (venta.getIdVe().equals(idv1)) {
+                            if (venta.getAbono() + abn <= venta.getTotal()) {
+                                int pg = venta.getAbono() + abn;
+
+                                gven.ActualizaAbono(idv1, pg);
+
+                                request.setAttribute("qw", true);
+                                request.getRequestDispatcher("Controlador1?accion=Pagos").forward(request, response);
+
+                                System.out.println("el nuevo abono es de " + pg);
+                            } else if (venta.getAbono() + abn > venta.getTotal()) {
+                                request.setAttribute("qw", false);
+                                request.getRequestDispatcher("Controlador1?accion=Pagos").forward(request, response);
+                            }
+
+                        }
+                    }
+                } else {
+                    request.setAttribute("qe", true);
+                    request.getRequestDispatcher("Controlador1?accion=Pagos").forward(request, response);
+                }
+
+                //System.out.println("el id es "+ idv1+" "+"y el abono es de "+abn);
                 break;
 
             default:

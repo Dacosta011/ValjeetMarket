@@ -189,13 +189,14 @@ public class GestionVenta extends AbstractDB {
 
         try {
             ResultSet res;
-            PreparedStatement stmt = this.conn.prepareStatement("call modifyAbonoCliente(?,?)");
+            PreparedStatement stmt = this.conn.prepareStatement("UPDATE venta SET \n" +
+                                                        "        Abono = ?\n" +
+                                                        "        WHERE idVenta=?");
 
-            stmt.setString(1, idcompra);
-            stmt.setInt(2, abono);
+            stmt.setInt(1, abono);
+            stmt.setString(2, idcompra);
 
-            res = stmt.executeQuery();
-            res.close();
+            stmt.executeUpdate();
             actualizado = true;
 
         } catch (SQLException ex) {

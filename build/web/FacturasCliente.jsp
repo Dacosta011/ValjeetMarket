@@ -17,7 +17,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Valjeet Market</a>
+            <a class="navbar-brand" href="#">Valjeet Market <i class="fas fa-store"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -25,13 +25,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="Controlador1?accion=llenar">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="Controlador1?accion=llenar"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ofertas del Dia</a>
+                        <a class="nav-link" href="#"><i class="fas fa-tag"></i> Ofertas del Dia</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controlador1?accion=llenar">Seguir Comprando</a>
+                        <a class="nav-link" href="Controlador1?accion=llenar"><i class="fas fa-shopping-cart"></i> Seguir Comprando</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -41,10 +41,10 @@
                             <input type="hidden" name="idus" value="${usuario.getIdU()}">
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="Controlador1?accion=Factura">Ver Mis Facturas <i class="fas fa-receipt"></i></a>
+                            <a class="dropdown-item" href="#">Pago de Facturas <i class="fas fa-cash-register"></i></a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" style="color: red" href="Controlador1?accion=Salir">Salir</a>
+                            <a class="dropdown-item text-center" style="color: red " href="Controlador1?accion=Salir">Salir</a>
                         </div>
                     </li>
                 </ul>
@@ -68,7 +68,12 @@
                             <td>${ven.getIdVe()}</td>
                             <td>${ven.getFecha()}</td>
                             <td>${ven.getTotal()}</td>
-                            <td>${ven.isCredito()}</td>
+                            <c:if test="${ven.isCredito() == true}">
+                                <td>Credito</td>
+                            </c:if>
+                            <c:if test="${ven.isCredito() == false}">
+                                <td>Contado</td>
+                            </c:if>
                             <td>
                                 <a href="Controlador1?accion=Detalle&idven=${ven.getIdVe()}" class="btn btn-warning btn-block">Ver Detalles</a>
                             </td>
@@ -82,7 +87,7 @@
 
         <c:if test="${yea == true}">
             <script>
-               swal("Compra Exitosa!!!", "", "success");
+                swal("Compra Exitosa!!!", "", "success");
             </script>
         </c:if>
 

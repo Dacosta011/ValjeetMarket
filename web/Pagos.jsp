@@ -1,6 +1,6 @@
 <%-- 
-    Document   : carrito
-    Created on : 9/12/2019, 11:45:36 AM
+    Document   : Pagos
+    Created on : 12/12/2019, 12:07:52 PM
     Author     : USER
 --%>
 
@@ -10,13 +10,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/1269c35f52.js" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <title>JSP Page</title>
     </head>
     <body>
-
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Valjeet Market <i class="fas fa-store"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,50 +48,42 @@
                         </div>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
             </div>
         </nav>
 
         <div class="container mt-4">
             <div class="row">
                 <div class="col-sm-8">
-                    <div class="d-flex ml-auto col-sm-6">
-                        <label class="text-right mt-2 col-sm-6">NRO. SERIE</label>
-                        <input readonly="" type="text" name="numeroserie" class="form-control text-center" value="${nserie}" style="font-weight: bold;font-size: 18px">
-                    </div>
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Item</th>
-                                <th>Nombres</th>
-                                <th>Foto</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Subtotal</th>
+                                <th>N° Factura</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Deuda</th>
+                                <th>Credito</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="car" items="${carrito}">
+                            <c:forEach var="ven" items="${ventas}">
                                 <tr>
-                                    <td>${car.getItem()}</td>
-                                    <td>${car.getNombres()}</td>
-                                    <td><img src="img/${car.getNombreFoto()}" width="100" height="100"></td>
-                                    <td>${car.getPrecioCompra()}</td>
+                                    <td>${ven.getIdVe()}</td>
+                                    <td>${ven.getFecha()}</td>
+                                    <td>${ven.getTotal()}</td>
+                                    <td>${ven.getTotal()- ven.getAbono()}</td>
+                                    <c:if test="${ven.isCredito() == true}">
+                                        <td>Credito</td>
+                                    </c:if>
+                                    
                                     <td>
-                                        <input type="hidden" id="idpro" value="${car.getIdProducto()}">
-                                        <input type="number" id="Cantidad" value="${car.getCantidad()}" class="form-control text-center" min="1" max="10" >
-                                    </td>
-                                    <td>${car.getSubtotal()}</td>
-                                    <td>
-                                        <input type="hidden" id="idp" value="${car.getIdProducto()}">
-                                        <a href="" id="btnElimina"><i class="fas fa-trash"></i></a>
+                                        <a href="Controlador1?accion=poner&idven=${ven.getIdVe()}" class="btn btn-warning btn-block">Pagar</a>
                                     </td>
                                 </tr>
                             </c:forEach>
+
+
+
                         </tbody>
                     </table>
 
@@ -101,47 +92,53 @@
                     <form action="Controlador1">
                         <div class="card">
                             <div class="card-header">
-                                <h3>Generar Compra</h3>
+                                <h3>Pagar Factura</h3>
                             </div>
                             <div class="card-body">
-                                <label>Subtotal</label>
-                                <input type="text" readonly="" value="$.${total}" class="form-control">
-                                <label>Descuento</label>
-                                <input type="text" readonly="" value="$.0.00" class="form-control">
                                 <label>Total</label>
-                                <input type="text" readonly="" value="$.${total}" class="form-control">
+                                <input type="hidden" value="${idv}" name="hidd">
+                                <input type="text" readonly="" value="$.${tot}" class="form-control">
+                                <label>Deuda</label>
+                                <input type="text" readonly="" value="$.${deu}" class="form-control">
+                                <br>
+
+                                <div class="dropdown-divider"style="color: black"></div>
+                                <label>Abono</label>
+                                <input type="number" name="txtabon" class="form-control">
                             </div>
                             <div class="card-footer">
-                                <div class="d-flex">
-                                    <label>Credito</label>
-                                    <input type="checkbox" name="checre"class="form-control">
-                                </div><br>
-                                <input type="submit" name="accion" value="Compra" class="btn btn-danger btn-block">
-
+                                <input type="submit" name="accion" value="Pagar" class="btn btn-danger btn-block">
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <c:if test="${ok == true}">
+
+            <c:if test="${qw == true}">
                 <script>
-                                        //alert("${mens}");
-                                        swal("Compra fallida", "${mens}", "error");
+                    swal("Operacion Exitosa", "Pago Realizado Correctamente", "success");
+                </script>
+            </c:if>
+            <c:if test="${qw == false}">
+                <script>
+                    swal("Operacion Fallida", "Intentas Pagar Mas De Lo Que Debes", "error");
+                </script>
+            </c:if>
+
+            <c:if test="${qe == true}">
+                <script>
+                    swal("Operacion Fallida", "Debes Escoger Alguna Factura", "error");
                 </script>
             </c:if>
 
         </div>
 
 
-
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-        <script src="js/js.js" type="text/javascript"></script>
-        <script src="js/js2.js" type="text/javascript"></script>
 
     </body>
-
 </html>
