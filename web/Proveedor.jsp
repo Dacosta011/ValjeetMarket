@@ -37,6 +37,7 @@
                                 </tr>
                             </thead>
                             <tbody> 
+                                
                                 <c:forEach var="prove" items="${proveedores}">
                                            
                                     <tr>
@@ -44,6 +45,7 @@
                                         <td>${prove.getNombreP()}</td>
                                      
                                     </tr>
+                                    
                                 </c:forEach>
                                     
                             </tbody>

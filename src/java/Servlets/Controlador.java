@@ -47,10 +47,14 @@ public class Controlador extends HttpServlet {
             switch (accion) 
             {
                 case "Listar":
+                    
                     ArrayList<Producto> lista = pdao.getTodos();
                     System.out.println(lista);
                     
-                    request.setAttribute("productos", lista);
+                    request.setAttribute("protos", lista);
+                    
+                    request.getRequestDispatcher("Producto.jsp").forward(request, response);
+                    
                     break;
                     
                 case "Agregar":
@@ -69,7 +73,7 @@ public class Controlador extends HttpServlet {
                     p.setNombreFotoPo(fot);
                     pdao.guardaProducto(p);
          
-                    //request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
                     break;
                     
                     
@@ -80,11 +84,12 @@ public class Controlador extends HttpServlet {
                     System.out.println(pr);
                     request.setAttribute("productoe", pr);
                     //response.sendRedirect("Controlador?menu=Producto&accion=Listar");
-                   // request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
                     break;
                     
                 case "Actualizar":
                     String id1 = request.getParameter("txtid");
+                    String oldid = request.getParameter("oldid");
                     String Nombre1 = request.getParameter("txtNombres");
                     double pre1 = Double.parseDouble(request.getParameter("txtPre"));
                     String fot1 = request.getParameter("txtFoto");
@@ -96,21 +101,22 @@ public class Controlador extends HttpServlet {
                     double precioventa1 = (pre1*0.2)+pre1;
                     p.setPrecioVentaPo(Double.toString(precioventa1));
                     p.setNombreFotoPo(fot1);
-                    pdao.modificarDemandante(p, id1);
-                    //request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+                    pdao.modificarDemandante(p, oldid);
+                    
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
                     break;
                     
                 case "Delete":
                     String idp2 = (request.getParameter("id"));
                     pdao.eliminarProducto(idp2);
-                    //request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
                     break;
                     
                 default:                    
-                    throw new AssertionError();
+                   
             }
             
-            request.getRequestDispatcher("Producto.jsp").forward(request, response);
+            //request.getRequestDispatcher("Producto.jsp").forward(request, response);
         }
     }
 

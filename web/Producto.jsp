@@ -1,4 +1,5 @@
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="Negocio.Producto"%>
 <%@page import="Gestion.GestionProducto"%>
 <%@page import="java.util.ArrayList"%>
@@ -16,9 +17,10 @@
                 <div class="card">
                     <div class="card-body">
                         <form action="Controlador?menu=Producto" method="POST">
-                            
+
                             <div class="form-group">
                                 <label>ID</label>
+                                <input type="hidden" value="${productoe.getIdPo()}" name="oldid">
                                 <input type="text" value="${productoe.getIdPo()}" name="txtid" class="form-control">
                             </div>
                             <div class="form-group">
@@ -55,27 +57,25 @@
                                 </tr>
                             </thead>
                             <tbody> 
-                                <%
-                                    GestionProducto gp = new Gestion.GestionProducto();
-                                    ArrayList<Producto> pro = gp.getTodos();
-                                    for (Producto producto : pro) 
-                                    {%>
-                                    
+
+                                <c:forEach var="p" items="${protos}">
                                     <tr>
-                                        <td> <%= producto.getIdPo() %> </td>
-                                        <th> <img src="img/<%= producto.getNombreFotoPo() %>"/> </th>
-                                        <td><%= producto.getNombrePo()%></td>
-                                        <td><%= producto.getCantidadPo()%></td>
-                                        <td><%= producto.getPrecioCompraPo()%></td>
-                                        <td><%= producto.getPrecioVentaPo()%></td>                                        
+                                        <td>${p.getIdPo()}</td>
+                                        <th> <img src="img/${p.getNombreFotoPo()}"/> </th>
+                                        <td>${p.getNombrePo()}</td>
+                                        <td>${p.getCantidadPo()}</td>
+                                        <td>${p.getPrecioCompraPo()}</td>
+                                        <td>${p.getPrecioVentaPo()}</td>                                        
                                         <td>
-                                            <a class="btn btn-warning" href="Controlador?menu=Producto&accion=Editar&id=<%= producto.getIdPo()%>">Editar</a>
-                                            <a class="btn btn-danger" href="Controlador?menu=Producto&accion=Delete&id=<%= producto.getIdPo()%>">Delete</a>
+                                            <a class="btn btn-warning" href="Controlador?menu=Producto&accion=Editar&id=${p.getIdPo()}">Editar</a>
+                                            <a class="btn btn-danger" href="Controlador?menu=Producto&accion=Delete&id=${p.getIdPo()}">Delete</a>
                                         </td>
                                     </tr>
-                                            
-                                    <%}%>
-                                
+                                </c:forEach>
+
+
+
+
                             </tbody>
                         </table>
                     </div>
@@ -85,6 +85,9 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="js/js.js" type="text/javascript"></script>
+        <script src="js/js2.js" type="text/javascript"></script>
     </body>
 </html>
 

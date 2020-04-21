@@ -48,6 +48,7 @@ public class ControladorProveedor extends HttpServlet {
                     System.out.println(lista);
                     
                     request.setAttribute("proveedores", lista);
+                    request.getRequestDispatcher("Proveedor.jsp").forward(request, response);
                     break;
                     
                 case "Agregar":
@@ -61,7 +62,7 @@ public class ControladorProveedor extends HttpServlet {
                     request.getRequestDispatcher("ControladorProveedor?menu=Proveedor&accion=Listar").forward(request, response);
                     break;   
                 default:                    
-                    throw new AssertionError();
+                    
             }
             
             request.getRequestDispatcher("Proveedor.jsp").forward(request, response);

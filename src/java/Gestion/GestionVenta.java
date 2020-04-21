@@ -46,7 +46,7 @@ public class GestionVenta extends AbstractDB {
         boolean todoBien = false;
         try {
             ResultSet res;
-            PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO clienteproducto(Cliente, Producto)\n" +
+            PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO cliente-producto(Cliente, Producto)\n" +
                                                         "        VALUES (?,?)");
 
             stmt.setString(1, idusuario);
